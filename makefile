@@ -1,19 +1,20 @@
-# Makefile
-
-.PHONY: local container down
-
-# Run the application locally
-local:
+dev:
 	make down
-	docker compose --profile local up --detach
+	docker compose --profile dev up -d
+	make open
 
-# Build and run the Docker container
 container:
-	make down
-	docker build --tag ghcr.io/{your_organization}/{your_product}_configurator:latest .
-	docker compose --profile prod up --detach
+	docker build -t YOUR_ORGANIZATION/mongodb_api:latest .
+	make deploy
 
-# Shut down testing containers and clean house
+deploy:
+	make down
+	docker compose --profile deploy up -d
+	make open
+
+open:
+	open -a 'Google Chrome' 'http://localhost:8082' || google-chrome 'http://localhost:8082' || exg-open 'localhost:8082'
+
 down:
-	docker compose down mongodb configurator_api configurator_spa
-	docker volume prune -f
+	docker compose --profile dev down
+	docker compose --profile deploy down

@@ -1,5 +1,3 @@
-# docker-compose.yaml for stage0_mongodb_api testing
-
 services:
   ##################################
   # MongoDB Backing Service
@@ -18,15 +16,13 @@ services:
       retries: 3
     command: ["--bind_ip_all", "--port", "27017"]
     profiles:
-      - mongodb
-      - configurator
-      - configurator-api
-      - playground
+      - dev
+      - deploy
 
   ##################################
-  # MongoDB Configurator Service - Mounts /input to $INPUT_FOLDER
+  # MongoDB Configurator API - Dev Mode (mounts ./configurator to /input)
   ##################################
-  configurator_api:
+  dev_api:
     image: ghcr.io/agile-learning-institute/mongodb_configurator_api:latest
     restart: no
     ports:
@@ -40,56 +36,62 @@ services:
       SPA_PORT: 8082
       INPUT_FOLDER: /input
     volumes:
-      - ${INPUT_FOLDER:-./tests/test_cases/playground}:/input
+      - ./configurator:/input
     depends_on:
       mongodb:
         condition: service_healthy
     profiles:
-      - configurator-api
-      - configurator
+      - dev
 
-  configurator_spa:
+  dev_spa:
     image: ghcr.io/agile-learning-institute/mongodb_configurator_spa:latest
     restart: no
     environment:
-      API_HOST: configurator_api
+      API_HOST: dev_api
       API_PORT: 8081
       SPA_PORT: 8082
     ports:
       - 8082:8082
     depends_on:
-      - configurator_api
+      dev_api:
+        condition: service_started
     profiles:
-      - configurator
+      - dev
 
-##################################
-# MongoDB configuration Service - Sets Input to /playground
-##################################
-  playground_api:
-    image: ghcr.io/agile-learning-institute/mongodb_configurator_api:latest
+  ##################################
+  # MongoDB Configurator API - Deploy Mode (Packaged Configurations)
+  ##################################
+  deploy_api:
+    image: YOUR_ORGANIZATION/mongodb_api:latest
     restart: no
     ports:
       - 8081:8081
     environment:
+      MONGO_CONNECTION_STRING: mongodb://mongodb:27017/
+      AUTO_PROCESS: False
+      LOAD_TEST_DATA: True
+      MONGO_DB_NAME: test_database
       API_PORT: 8081
       SPA_PORT: 8082
-      INPUT_FOLDER: /playground
+      INPUT_FOLDER: /input
     depends_on:
       mongodb:
         condition: service_healthy
     profiles:
-      - playground
+      - deploy
 
-  playground_spa:
+  deploy_spa:
     image: ghcr.io/agile-learning-institute/mongodb_configurator_spa:latest
     restart: no
     environment:
-      API_HOST: playground_api
+      API_HOST: deploy_api
       API_PORT: 8081
       SPA_PORT: 8082
     ports:
       - 8082:8082
     depends_on:
-      - playground_api
+      deploy_api:
+        condition: service_started
     profiles:
-      - playground
+      - deploy
+

@@ -1,23 +1,18 @@
-# MongoDB Configurator Database
+# mongodb_data
 
-This template contains the MongoDB Configurator for {YOUR_PROJECT}. When running, the Configurator UI is available at http://localhost:8082
-
-## Prerequisites
-- [Docker Desktop]()
-- [Make]()
+This repo contains the MongodDB Database Configurations for the Creator Dashboard system. You can use the following commands to test, edit, and package these configurations.
 
 ## Developer Commands
-```bash
-# Run in Test mode to interactively create and test configurations
-make test
+```sh
+## Run the dev runtime to edit the configurations.
+make dev
 
-# Test Container Deployment - Non editable
-make prod
+## Build the container for deployment
+make container
 
-# Lock New Schemas for Publication.
-make package
-# Always package before committing final changes. 
+## Run the packaged configuration. (Read Only configurations)
+make deploy
+
+## Shut down the containers
+make down
 ```
-
-## MongoDB Connection String
-The MongoDB Connection String to use to access the test database is ``adsfasdf``
