@@ -1,6 +1,10 @@
-# mongodb_data
+# MongoDB Configurations
 
-This repo contains the MongodDB Database Configurations for the Creator Dashboard system. You can use the following commands to test, edit, and package these configurations.
+! After creating a new repo using this template, you will need to replace YOUR_ORGANIZATION with an appropriate value in [./Makefile] and [docker-compose.yaml] and then update the README below as appropriate.
+
+---
+
+This repo contains the MongodDB Database Configurations for the YOUR_PRODUCT system. You can use the following commands to test, edit, and package these configurations.
 
 ## Developer Commands
 ```sh
