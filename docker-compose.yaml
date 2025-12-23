@@ -34,7 +34,6 @@ services:
       MONGO_DB_NAME: test_database
       API_PORT: 8081
       SPA_PORT: 8082
-      INPUT_FOLDER: /input
     volumes:
       - ./configurator:/input
     depends_on:
@@ -73,7 +72,6 @@ services:
       MONGO_DB_NAME: test_database
       API_PORT: 8081
       SPA_PORT: 8082
-      INPUT_FOLDER: /input
     depends_on:
       mongodb:
         condition: service_healthy

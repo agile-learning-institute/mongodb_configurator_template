@@ -4,8 +4,8 @@ FROM ghcr.io/agile-learning-institute/mongodb_configurator_api:latest
 # Switch to root to set up /input directory
 USER root
 
-# Remove playground folder from base image
-RUN rm -rf /playground
+# Remove playground /input from base image (playground data is in /input)
+RUN rm -rf /input
 
 # Copy Configurations to the input folder (using absolute paths to preserve base image WORKDIR)
 COPY configurator/api_deploy /input/api_config
