@@ -4,8 +4,8 @@ dev:
 	make open
 
 pull:
-	docker compose --profile deploy pull
 	docker compose --profile dev pull
+	docker compose --profile deploy pull
 
 container:
 	docker build -t YOUR_ORGANIZATION/mongodb_api:latest .
